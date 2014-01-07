@@ -4,7 +4,7 @@ var	fs = require('fs'),
 	winston = module.parent.require('winston'),
 	Meta = module.parent.require('./meta'),
 
-	Mandrill = require('node-mandrill')(Meta.config['mandrill:apiKey'] || 'Replace Me', Meta.config['mandrill:domain'] || 'Replace Me'),
+	Mandrill = require('node-mandrill')(Meta.config['mandrill:apiKey'] || 'Replace Me'),
 	Emailer = {};
 
 Emailer.send = function(data) {
