@@ -5,7 +5,7 @@
 	"main": "index.js",
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/julianlam/nodebb-plugin-emailer-mandrill"
+		"url": "https://github.com/akhoury/nodebb-plugin-emailer-mandrill"
 	},
 	"keywords": [
 		"nodebb",
