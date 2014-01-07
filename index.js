@@ -34,7 +34,7 @@ Emailer.admin = {
 		custom_header.plugins.push({
 			"route": '/plugins/emailer-mandrill',
 			"icon": 'fa-envelope-o',
-			"name": 'Emailer (MailGun)'
+			"name": 'Emailer (Mandrill)'
 		});
 
 		return custom_header;
