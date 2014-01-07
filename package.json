@@ -1,0 +1,26 @@
+{
+	"name": "nodebb-plugin-emailer-mandrill",
+	"version": "0.0.1",
+	"description": "An emailer plugin for NodeBB using Mandrill as a third party service",
+	"main": "index.js",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/julianlam/nodebb-plugin-emailer-mandrill"
+	},
+	"keywords": [
+		"nodebb",
+		"plugin",
+		"emailer",
+		"mandrill"
+	],
+	"author": "Aziz khoury <bentael@gmail.com>",
+	"license": "MIT",
+	"bugs": {
+		"url": "https://github.com/akhoury/nodebb-plugin-emailer-mandrill/issues"
+	},
+	"homepage": "https://github.com/akhoury/nodebb-plugin-emailer-mandrill",
+	"dependencies": {
+		"path": "~0.4.9",
+		"node-mandrill": "~1.0.1"
+	}
+}
