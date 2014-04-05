@@ -1,11 +1,27 @@
 var fs = require('fs'),
 	path = require('path'),
-
 	winston = module.parent.require('winston'),
 	Meta = module.parent.require('./meta'),
-
-	Mandrill = require('node-mandrill')(Meta.config['mandrill:apiKey'] || 'Replace Me'),
+	Mandrill,
 	Emailer = {};
+
+Emailer.init = function(app, middleware, controllers) {
+
+    var render = function(req, res, next) {
+        res.render('admin/plugins/emailer-mandrill', {});
+    }
+
+    Meta.settings.get('mandrill', function(err, settings) {
+        if (!err && settings && settings.apiKey) {
+            Mandrill = require('node-mandrill')(settings.apiKey || 'Replace Me');
+        } else {
+            winston.error('[plugins/emailer-mandrill] API key not set!');
+        }
+    });
+
+    app.get('/admin/plugins/emailer-mandrill', middleware.admin.buildHeader, render);
+    app.get('/api/admin/plugins/emailer-mandrill', render);
+};
 
 Emailer.send = function(data) {
 
@@ -23,41 +39,23 @@ Emailer.send = function(data) {
 			winston.info('[emailer.mandrill] Sent `' + data.template + '` email to uid ' + data.uid);
 		} else {
 			winston.warn('[emailer.mandrill] Unable to send `' + data.template + '` email to uid ' + data.uid + '!!');
-			winston.error('[emailer.mandrill] ' + err);
-			winston.error('[emailer.mandrill] ' + response);
+			winston.warn('[emailer.mandrill] Error Stringified:' + JSON.stringify(err));
 		}
 	});
 };
 
 Emailer.admin = {
-	menu: function(custom_header, callback) {
-		custom_header.plugins.push({
-			"route": '/plugins/emailer-mandrill',
-			"icon": 'fa-envelope-o',
-			"name": 'Emailer (Mandrill)'
-		});
+    menu: function(custom_header, callback) {
+        custom_header.plugins.push({
+            "route": '/plugins/emailer-mandrill',
+            "icon": 'fa-envelope-o',
+            "name": 'Emailer (Mandrill)'
+        });
 
-		return custom_header;
-	},
-	route: function(custom_routes, callback) {
-		fs.readFile(path.join(__dirname, 'public/templates/admin.tpl'), function(err, tpl) {
-			custom_routes.routes.push({
-				route: '/plugins/emailer-mandrill',
-				method: "get",
-				options: function(req, res, callback) {
-					callback({
-						req: req,
-						res: res,
-						route: '/plugins/emailer-mandrill',
-						name: 'Emailer (Mandrill)',
-						content: tpl
-					});
-				}
-			});
-
-			callback(null, custom_routes);
-		});
-	}
+        callback(null, custom_header);
+    }
 };
 
 module.exports = Emailer;
+
+

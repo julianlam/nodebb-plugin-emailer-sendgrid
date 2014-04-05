@@ -4,9 +4,10 @@
 	"description": "Mandrill Emailer for NodeBB",
 	"url": "https://github.com/akhoury/nodebb-plugin-emailer-mandrill",
 	"library": "./index.js",
-	"hooks": [
-		{ "hook": "action:email.send", "method": "send" },
-		{ "hook": "filter:admin.header.build", "method": "admin.menu", "callbacked": false },
-		{ "hook": "filter:admin.create_routes", "method": "admin.route", "callbacked": true }
+    "templates": "templates",
+    "hooks": [
+		{ "hook": "action:email.send", "method": "send"},
+		{ "hook": "filter:admin.header.build", "method": "admin.menu"},
+        { "hook": "action:app.load", "method": "init" }
 	]
 }
