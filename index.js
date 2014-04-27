@@ -24,24 +24,27 @@ Emailer.init = function(app, middleware, controllers) {
 };
 
 Emailer.send = function(data) {
-
-	Mandrill('/messages/send', {
-		message: {
-			to: [{email: data.to, name: data.toName}],
-			subject: data.subject,
-			from_email: data.from,
-			html: data.html,
-			text: data.plaintext,
-			auto_text: !!!data.plaintext
-		}
-	}, function (err, response) {
-		if (!err) {
-			winston.info('[emailer.mandrill] Sent `' + data.template + '` email to uid ' + data.uid);
-		} else {
-			winston.warn('[emailer.mandrill] Unable to send `' + data.template + '` email to uid ' + data.uid + '!!');
-			winston.warn('[emailer.mandrill] Error Stringified:' + JSON.stringify(err));
-		}
-	});
+	if (Mandrill) {
+		Mandrill('/messages/send', {
+			message: {
+				to: [{email: data.to, name: data.toName}],
+				subject: data.subject,
+				from_email: data.from,
+				html: data.html,
+				text: data.plaintext,
+				auto_text: !!!data.plaintext
+			}
+		}, function (err, response) {
+			if (!err) {
+				winston.info('[emailer.mandrill] Sent `' + data.template + '` email to uid ' + data.uid);
+			} else {
+				winston.warn('[emailer.mandrill] Unable to send `' + data.template + '` email to uid ' + data.uid + '!!');
+				winston.warn('[emailer.mandrill] Error Stringified:' + JSON.stringify(err));
+			}
+		});
+	} else {
+		winston.warn('[plugins/emailer-mandrill] API key not set, not sending email as Mandrill object is not instantiated.');
+	}
 };
 
 Emailer.admin = {
