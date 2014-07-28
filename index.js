@@ -5,7 +5,7 @@ var fs = require('fs'),
 	Mandrill,
 	Emailer = {};
 
-Emailer.init = function(app, middleware, controllers) {
+Emailer.init = function(app, middleware, controllers, callback) {
 
     var render = function(req, res, next) {
         res.render('admin/plugins/emailer-mandrill', {});
@@ -21,6 +21,8 @@ Emailer.init = function(app, middleware, controllers) {
 
     app.get('/admin/plugins/emailer-mandrill', middleware.admin.buildHeader, render);
     app.get('/api/admin/plugins/emailer-mandrill', render);
+
+    callback();
 };
 
 Emailer.send = function(data) {
