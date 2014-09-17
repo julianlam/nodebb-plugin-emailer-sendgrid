@@ -22,7 +22,9 @@ Emailer.init = function(app, middleware, controllers, callback) {
     app.get('/admin/plugins/emailer-mandrill', middleware.admin.buildHeader, render);
     app.get('/api/admin/plugins/emailer-mandrill', render);
 
-    callback();
+    if (typeof callback === 'function') {
+   	callback();
+    }
 };
 
 Emailer.send = function(data) {
