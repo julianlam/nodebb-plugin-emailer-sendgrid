@@ -15,14 +15,14 @@ Emailer.init = function(app, middleware, controllers, callback) {
         } else {
             winston.error('[plugins/emailer-mandrill] API key not set!');
         }
+
+        app.get('/admin/plugins/emailer-mandrill', middleware.admin.buildHeader, render);
+        app.get('/api/admin/plugins/emailer-mandrill', render);
+
+        if (typeof callback === 'function') {
+            callback();
+        }
     });
-
-    app.get('/admin/plugins/emailer-mandrill', middleware.admin.buildHeader, render);
-    app.get('/api/admin/plugins/emailer-mandrill', render);
-
-    if (typeof callback === 'function') {
-        callback();
-    }
 };
 
 Emailer.send = function(data) {
