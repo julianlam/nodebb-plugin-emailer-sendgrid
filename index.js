@@ -16,8 +16,8 @@ Emailer.init = function(data, callback) {
             winston.error('[plugins/emailer-mandrill] API key not set!');
         }
 
-        data.app.get('/admin/plugins/emailer-mandrill', data.middleware.admin.buildHeader, render);
-        data.app.get('/api/admin/plugins/emailer-mandrill', render);
+        data.router.get('/admin/plugins/emailer-mandrill', data.middleware.admin.buildHeader, render);
+        data.router.get('/api/admin/plugins/emailer-mandrill', render);
 
         if (typeof callback === 'function') {
             callback();
