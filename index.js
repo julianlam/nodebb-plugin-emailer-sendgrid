@@ -3,7 +3,7 @@ var winston = module.parent.require('winston'),
     Mandrill,
     Emailer = {};
 
-Emailer.init = function(app, middleware, controllers, callback) {
+Emailer.init = function(data, callback) {
 
     var render = function(req, res, next) {
         res.render('admin/plugins/emailer-mandrill', {});
@@ -16,8 +16,8 @@ Emailer.init = function(app, middleware, controllers, callback) {
             winston.error('[plugins/emailer-mandrill] API key not set!');
         }
 
-        app.get('/admin/plugins/emailer-mandrill', middleware.admin.buildHeader, render);
-        app.get('/api/admin/plugins/emailer-mandrill', render);
+        data.app.get('/admin/plugins/emailer-mandrill', data.middleware.admin.buildHeader, render);
+        data.app.get('/api/admin/plugins/emailer-mandrill', render);
 
         if (typeof callback === 'function') {
             callback();
