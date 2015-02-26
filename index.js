@@ -28,10 +28,11 @@ Emailer.init = function(data, callback) {
 Emailer.send = function(data) {
 	if (SendGrid) {
 		SendGrid.send({
-			to: data.toName + '<' + data.to + '>',
+			to: data.to,
 			subject: data.subject,
 			from: data.from,
-			text: data.html,
+			text: data.text,
+			html: data.html
 		}, function (err, response) {
 			if (!err) {
 				winston.info('[emailer.sendgrid] Sent `' + data.template + '` email to uid ' + data.uid);
