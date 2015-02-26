@@ -1,15 +1,13 @@
-var fs = require('fs'),
-	path = require('path'),
-	winston = module.parent.require('winston'),
+var winston = module.parent.require('winston'),
 	Meta = module.parent.require('./meta'),
 	SendGrid,
 	Emailer = {};
 
-Emailer.init = function(app, middleware, controllers, callback) {
+Emailer.init = function(data, callback) {
 
     var render = function(req, res, next) {
         res.render('admin/plugins/emailer-sendgrid', {});
-    }
+    };
 
     Meta.settings.get('sendgrid', function(err, settings) {
         if (!err && settings && settings.apiUser && settings.apiKey) {
@@ -17,17 +15,19 @@ Emailer.init = function(app, middleware, controllers, callback) {
         } else {
             winston.error('[plugins/emailer-sendgrid] API user and key not set!');
         }
+
+	    data.router.get('/admin/plugins/emailer-sendgrid', data.middleware.admin.buildHeader, render);
+	    data.router.get('/api/admin/plugins/emailer-sendgrid', render);
+
+        if (typeof callback === 'function') {
+            callback();
+        }
     });
-
-    app.get('/admin/plugins/emailer-sendgrid', middleware.admin.buildHeader, render);
-    app.get('/api/admin/plugins/emailer-sendgrid', render);
-
-    callback();
 };
 
 Emailer.send = function(data) {
 	if (SendGrid) {
-		SendGrid.send('/messages/send', {
+		SendGrid.send({
 			to: data.toName + '<' + data.to + '>',
 			subject: data.subject,
 			from: data.from,
