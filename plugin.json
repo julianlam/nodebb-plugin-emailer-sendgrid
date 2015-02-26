@@ -1,8 +1,5 @@
 {
-	"id": "nodebb-plugin-emailer-mandrill",
-	"name": "Emailer (Mandrill)",
-	"description": "Mandrill Emailer for NodeBB",
-	"url": "https://github.com/akhoury/nodebb-plugin-emailer-mandrill",
+	"id": "nodebb-plugin-emailer-sendgrid",
 	"library": "./index.js",
     "templates": "templates",
     "hooks": [

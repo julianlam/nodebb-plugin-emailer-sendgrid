@@ -1,10 +1,10 @@
-<h1><i class="fa fa-envelope-o"></i> Emailer (Mandrill)</h1>
+<h1><i class="fa fa-envelope-o"></i> Emailer (SendGrid)</h1>
 
 <div class="row">
 	<div class="col-lg-12">
 		<blockquote>
 			<p>
-				Mandrill is a programmable email platform. It allows your application to become a fully featured email server. Send, receive and track messages with ease using your favorite programming language.<br /><br />
+				SendGrid is the world's largest Email Infrastructure as a Service provider. Our email delivery service moves 2% of the world's non-spam email (over 14 billion emails/month) for more than 180,000 companies including technology leaders like Pinterest, Spotify, and Uber.
 			</p>
 		</blockquote>
 		<p>
@@ -12,13 +12,10 @@
 		</p>
 		<ol>
 			<li>
-				Register for an account on <a href="http://mandrill.com">http://mandrill.com</a>. Mandrill offers a free tier with up to 250 free emails hourly.
+				Register for an account on <a href="https://sendgrid.com">https://sendgrid.com</a>. SendGrid offers a free tier with up to 400 free emails daily.
 			</li>
 			<li>
-			    Find your key, <a target="_blank" href="http://i.imgur.com/Hf0aCJX.png">screenshot-1</a>, <a target="_blank" href="http://i.imgur.com/edlN37G.png">screenshot-2</a>
-			</li>
-			<li>
-				Paste your API key into the field below, hit save, and restart your NodeBB
+			    Locate your API user and key, enter it into the fields below, and reload/restart your NodeBB
 			</li>
 		</ol>
 	</div>
@@ -29,6 +26,12 @@
 <form role="form" class="emailer-settings">
 	<fieldset>
 		<div class="row">
+			<div class="col-sm-6">
+				<div class="form-group">
+					<label for="apiUser">API User</label>
+					<input placeholder="Api User here" type="text" class="form-control" id="apiUser" name="apiUser" />
+				</div>
+			</div>
 			<div class="col-sm-6">
 				<div class="form-group">
 					<label for="apiKey">API Key</label>
@@ -43,11 +46,11 @@
 
 <script type="text/javascript">
 	require(['settings'], function(Settings) {
-		Settings.load('mandrill', $('.emailer-settings'));
+		Settings.load('sendgrid', $('.emailer-settings'));
 
 		$('#save').on('click', function() {
-			Settings.save('mandrill', $('.emailer-settings'), function() {
-				socket.emit('admin.restart');
+			Settings.save('sendgrid', $('.emailer-settings'), function() {
+				socket.emit('admin.reload');
 			});
 		});
 	});
