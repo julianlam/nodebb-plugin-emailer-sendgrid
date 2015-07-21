@@ -24,6 +24,12 @@
 
 				<form role="form" class="emailer-settings">
 					<fieldset>
+						<div class="checkbox">
+							<label for="apiHttp">
+								<input type="checkbox" id="apiHttp" name="apiHttp"/>
+								<strong>Use HTTP connection</strong>
+							</label>
+						</div>
 						<div class="row">
 							<div class="col-sm-6">
 								<div class="form-group">
@@ -54,17 +60,17 @@
 </div>
 
 <script type="text/javascript">
-	require(['settings'], function(Settings) {
+	require(['settings'], function (Settings) {
 		Settings.load('sendgrid', $('.emailer-settings'));
 
-		$('#save').on('click', function() {
-			Settings.save('sendgrid', $('.emailer-settings'), function() {
+		$('#save').on('click', function () {
+			Settings.save('sendgrid', $('.emailer-settings'), function () {
 				app.alert({
 					type: 'success',
 					alert_id: 'quickstart-saved',
 					title: 'Settings Saved',
 					message: 'Please reload your NodeBB to apply these settings',
-					clickfn: function() {
+					clickfn: function () {
 						socket.emit('admin.reload');
 					},
 					timeout: 5000
