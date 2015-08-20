@@ -23,6 +23,6 @@
     "sendgrid": "^1.6.0"
   },
   "nbbpm": {
-    "compatibility": "^0.6.0"
+    "compatibility": ">=0.6.0 ^0.7.0"
   }
 }
