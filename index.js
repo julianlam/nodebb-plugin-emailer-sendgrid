@@ -27,7 +27,7 @@ Emailer.init = function(data, callback) {
     });
 };
 
-Emailer.send = function(data) {
+Emailer.send = function(data, callback) {
 	if (SendGrid) {
 		SendGrid.send({
 			to: data.to,
@@ -37,14 +37,17 @@ Emailer.send = function(data) {
 			html: data.html
 		}, function (err, response) {
 			if (!err) {
-				winston.info('[emailer.sendgrid] Sent `' + data.template + '` email to uid ' + data.uid);
+				winston.verbose('[emailer.sendgrid] Sent `' + data.template + '` email to uid ' + data.uid);
+				callback(null, data);
 			} else {
 				winston.warn('[emailer.sendgrid] Unable to send `' + data.template + '` email to uid ' + data.uid + '!!');
 				winston.warn('[emailer.sendgrid] Error Stringified:' + JSON.stringify(err));
+				callback(err);
 			}
 		});
 	} else {
 		winston.warn('[plugins/emailer-sendgrid] API user and key not set, not sending email as SendGrid object is not instantiated.');
+		callback(null, data);
 	}
 };
 
