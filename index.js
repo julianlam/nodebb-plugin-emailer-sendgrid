@@ -10,12 +10,10 @@ Emailer.init = function(data, callback) {
     };
 
     Meta.settings.get('sendgrid', function(err, settings) {
-        if (!err && settings && settings.apiHttp == 'on' && settings.apiKey) {
-            SendGrid = require('sendgrid')(null, settings.apiKey);
-        } else if (!err && settings && settings.apiUser && settings.apiKey) {
-            SendGrid = require('sendgrid')(settings.apiUser, settings.apiKey);
+        if (!err && settings && settings.apiKey) {
+            SendGrid = require('sendgrid')(settings.apiKey);
         } else {
-            winston.error('[plugins/emailer-sendgrid] API user and key not set!');
+            winston.error('[plugins/emailer-sendgrid] API key not set!');
         }
 
 	    data.router.get('/admin/plugins/emailer-sendgrid', data.middleware.admin.buildHeader, render);

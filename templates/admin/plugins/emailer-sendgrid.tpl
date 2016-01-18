@@ -23,28 +23,10 @@
 				<hr />
 
 				<form role="form" class="emailer-settings">
-					<fieldset>
-						<div class="checkbox">
-							<label for="apiHttp">
-								<input type="checkbox" id="apiHttp" name="apiHttp"/>
-								<strong>Use HTTP connection</strong>
-							</label>
-						</div>
-						<div class="row">
-							<div class="col-sm-6">
-								<div class="form-group">
-									<label for="apiUser">API User</label>
-									<input placeholder="Api User here" type="text" class="form-control" id="apiUser" name="apiUser" />
-								</div>
-							</div>
-							<div class="col-sm-6">
-								<div class="form-group">
-									<label for="apiKey">API Key</label>
-									<input placeholder="Api Key here" type="text" class="form-control" id="apiKey" name="apiKey" />
-								</div>
-							</div>
-						</div>
-					</fieldset>
+					<div class="form-group">
+						<label for="apiKey">API Key</label>
+						<input placeholder="Api Key here" type="text" class="form-control" id="apiKey" name="apiKey" />
+					</div>
 				</form>
 			</div>
 		</div>
