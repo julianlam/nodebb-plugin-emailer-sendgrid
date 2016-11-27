@@ -31,6 +31,7 @@ Emailer.send = function(data, callback) {
 			to: data.to,
 			subject: data.subject,
 			from: data.from,
+			fromname: data.from_name,
 			text: data.text,
 			html: data.html
 		}, function (err, response) {
