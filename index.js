@@ -19,7 +19,7 @@ Emailer.init = function(data, callback) {
 
     var render = function(req, res, next) {
 		var destinationURL = nconf.get('url') + '/plugins/emailer-sendgrid/webhook';
-        res.render('admin/plugins/emailer-sendgrid', { destinationURL: destinationURL});
+		res.render('admin/plugins/emailer-sendgrid', { destinationURL: destinationURL});
     };
 
     Meta.settings.get('sendgrid', function(err, settings) {
