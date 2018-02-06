@@ -169,7 +169,7 @@ Emailer.send = function (data, callback) {
 				function (next) {
 					if (data.fromUid) {
 						next(null, data.fromUid);
-					} else if (data._raw.notification.pid) {
+					} else if (data._raw.notification && data._raw.notification.pid) {
 						Posts.getPostField(data._raw.notification.pid, 'uid', next);
 					} else {
 						next(null, false);
