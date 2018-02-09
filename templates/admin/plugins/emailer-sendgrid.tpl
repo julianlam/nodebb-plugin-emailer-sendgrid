@@ -39,7 +39,7 @@
 				</p>
 				<ol>
 					<li>
-						Go to <a href="https://app.sendgrid.com/settings/parse" target="_blank">Settings -> Inbound Parse</a> -> **Add Host & URL**.
+						Go to <a href="https://app.sendgrid.com/settings/parse" target="_blank">Settings -> Inbound Parse</a> -> <strong>Add Host & URL</strong>.
 					</li>
 					<li>
 						You may be requested to add a "New Domain Whitelabel", if so, follow the instructions to set up your DNS settings accordingly. If you are hosted as a subdomain on NodeBB, please open a support ticket on our <a href="https://nodebb.org" target="_blank">live chat</a> or email us at <a href="mailto:support@nodebb.org">support@nodebb.org</a> to set this up for you.
