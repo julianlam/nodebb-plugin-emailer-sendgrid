@@ -8,6 +8,7 @@ var Meta = module.parent.require('./meta');
 var Posts = module.parent.require('./posts');
 var Topics = module.parent.require('./topics');
 var Privileges = module.parent.require('./privileges');
+var Plugins = module.parent.require('./plugins');
 var SocketHelpers = module.parent.require('./socket.io/helpers');
 var User = module.parent.require('./user');
 var hostEmailer = module.parent.require('./emailer');
@@ -44,17 +45,28 @@ Emailer.init = function (data, callback) {
 };
 
 Emailer.receive = function (req, res) {
-	async.waterfall([
-		async.apply(Emailer.verifyEvent, req.body),
-		Emailer.resolveUserOrGuest,
-		Emailer.processEvent,
-		Emailer.notifyUsers,
-	], function (err, eventObj) {
+	Plugins.fireHook('filter:plugins.emailer.receive', {
+		req: req,
+		res: res,
+		service: 'sendgrid',
+	}, function (err, data) {
 		if (err) {
-			return Emailer.handleError(err, eventObj);
+			Emailer.handleError(err, data.req.body);
+			return res.sendStatus(200);
 		}
 
-		res.sendStatus(200);
+		async.waterfall([
+			async.apply(Emailer.verifyEvent, data.req.body),
+			Emailer.resolveUserOrGuest,
+			Emailer.processEvent,
+			Emailer.notifyUsers,
+		], function (err, eventObj) {
+			if (err) {
+				Emailer.handleError(err, eventObj);
+			}
+
+			res.sendStatus(200);
+		});
 	});
 };
 
