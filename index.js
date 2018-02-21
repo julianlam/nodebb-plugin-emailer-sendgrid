@@ -61,7 +61,7 @@ Emailer.receive = function (req, res) {
 Emailer.verifyEvent = function (eventObj, next) {
 	var pid = eventObj.to.match(Emailer.receiptRegex);
 
-	if (pid.length && pid[1]) {
+	if (pid && pid.length && pid[1]) {
 		pid = pid[1];
 		eventObj.pid = pid;
 		Posts.getPostField(pid, 'tid', function (err, tid) {
@@ -75,7 +75,7 @@ Emailer.verifyEvent = function (eventObj, next) {
 		});
 	} else {
 		winston.warn('[emailer.sendgrid.verifyEvent] Could not locate post id');
-		next(new Error('invalid-data'));
+		next(new Error('invalid-data'), eventObj);
 	}
 };
 
@@ -232,20 +232,22 @@ Emailer.send = function (data, callback) {
 };
 
 Emailer.handleError = function (err, eventObj) {
+	var envelope = JSON.parse(eventObj.envelope);
+
 	if (err) {
 		switch (err.message) {
 		case '[[error:no-privileges]]':
 		case 'invalid-data':
 			// Bounce a return back to sender
-			hostEmailer.sendToEmail('bounce', eventObj.msg.from_email, Meta.config.defaultLang || 'en_GB', {
+			hostEmailer.sendToEmail('bounce', envelope.from, Meta.config.defaultLang || 'en_GB', {
 				site_title: Meta.config.title || 'NodeBB',
-				subject: 'Re: ' + eventObj.msg.subject,
-				messageBody: eventObj.msg.html,
+				subject: 'Re: ' + eventObj.subject,
+				messageBody: eventObj.html,
 			}, function (err) {
 				if (err) {
 					winston.error('[emailer.sendgrid] Unable to bounce email back to sender! ' + err.message);
 				} else {
-					winston.verbose('[emailer.sendgrid] Bounced email back to sender (' + eventObj.msg.from_email + ')');
+					winston.verbose('[emailer.sendgrid] Bounced email back to sender (' + envelope.from + ')');
 				}
 			});
 			break;
