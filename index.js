@@ -251,7 +251,7 @@ Emailer.handleError = function (err, eventObj) {
 		case '[[error:no-privileges]]':
 		case 'invalid-data':
 			// Bounce a return back to sender
-			hostEmailer.sendToEmail('bounce', envelope.from, Meta.config.defaultLang || 'en_GB', {
+			hostEmailer.sendToEmail('bounce', envelope.from, Meta.config.defaultLang || 'en-GB', {
 				site_title: Meta.config.title || 'NodeBB',
 				subject: 'Re: ' + eventObj.subject,
 				messageBody: eventObj.html,
