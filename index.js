@@ -26,7 +26,8 @@ Emailer.init = function (data, callback) {
 
 	Meta.settings.get('sendgrid', function (err, settings) {
 		if (!err && settings && settings.apiKey) {
-			SendGrid = require('sendgrid')(settings.apiKey);
+			SendGrid = require('@sendgrid/mail');
+			SendGrid.setApiKey(settings.apiKey);
 		} else {
 			winston.error('[plugins/emailer-sendgrid] API key not set!');
 		}
@@ -171,10 +172,9 @@ Emailer.send = function (data, callback) {
 				return callback(err);
 			}
 
-			var headers = {};
-
+			data.headers = data.headers || {};	// pre core v1.10.2
 			if (data._raw.notification && data._raw.notification.pid && settings.hasOwnProperty('inbound_enabled')) {
-				headers['Reply-To'] = 'reply-' + data._raw.notification.pid + '@' + Emailer.hostname;
+				data.headers['Reply-To'] = 'reply-' + data._raw.notification.pid + '@' + Emailer.hostname;
 			}
 
 			async.waterfall([
@@ -223,7 +223,7 @@ Emailer.send = function (data, callback) {
 						fromname: data.from_name || userData.username || undefined,
 						text: data.text,
 						html: data.html,
-						headers: headers,
+						headers: data.headers,
 					}, next);
 				},
 			], function (err) {
