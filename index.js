@@ -173,9 +173,6 @@ Emailer.send = function (data, callback) {
 			}
 
 			data.headers = data.headers || {};	// pre core v1.10.2
-			if (data._raw.notification && data._raw.notification.pid && settings.inbound_enabled === 'on') {
-				data.headers['Reply-To'] = 'reply-' + data._raw.notification.pid + '@' + Emailer.hostname;
-			}
 
 			async.waterfall([
 				function (next) {
@@ -215,6 +212,11 @@ Emailer.send = function (data, callback) {
 					});
 				},
 				function (userData, next) {
+					let replyTo;
+					if (data._raw.notification && data._raw.notification.pid && settings.inbound_enabled === 'on') {
+						replyTo = 'reply-' + data._raw.notification.pid + '@' + Emailer.hostname;
+					}
+
 					SendGrid.send({
 						to: data.to,
 						toname: data.toName,
@@ -224,6 +226,7 @@ Emailer.send = function (data, callback) {
 						text: data.text,
 						html: data.html,
 						headers: data.headers,
+						reply_to: replyTo,
 					}, next);
 				},
 			], function (err) {
