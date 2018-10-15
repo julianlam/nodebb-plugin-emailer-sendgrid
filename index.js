@@ -173,7 +173,7 @@ Emailer.send = function (data, callback) {
 			}
 
 			data.headers = data.headers || {};	// pre core v1.10.2
-			if (data._raw.notification && data._raw.notification.pid && settings.hasOwnProperty('inbound_enabled')) {
+			if (data._raw.notification && data._raw.notification.pid && settings.inbound_enabled === 'on') {
 				data.headers['Reply-To'] = 'reply-' + data._raw.notification.pid + '@' + Emailer.hostname;
 			}
 
