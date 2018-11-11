@@ -1,17 +1,17 @@
 'use strict';
 
-var winston = module.parent.require('winston');
-var async = module.parent.require('async');
-var nconf = module.parent.require('nconf');
-var url = module.parent.require('url');
-var Meta = module.parent.require('./meta');
-var Posts = module.parent.require('./posts');
-var Topics = module.parent.require('./topics');
-var Privileges = module.parent.require('./privileges');
-var Plugins = module.parent.require('./plugins');
-var SocketHelpers = module.parent.require('./socket.io/helpers');
-var User = module.parent.require('./user');
-var hostEmailer = module.parent.require('./emailer');
+var winston = require.main.require('winston');
+var async = require.main.require('async');
+var nconf = require.main.require('nconf');
+var url = require.main.require('url');
+var Meta = require.main.require('./src/meta');
+var Posts = require.main.require('./src/posts');
+var Topics = require.main.require('./src.topics');
+var Privileges = require.main.require('./src/privileges');
+var Plugins = require.main.require('./src/plugins');
+var SocketHelpers = require.main.require('./src/socket.io/helpers');
+var User = require.main.require('./src/user');
+var hostEmailer = require.main.require('./src/emailer');
 var SendGrid;
 var Emailer = {};
 
