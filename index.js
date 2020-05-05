@@ -160,7 +160,7 @@ Emailer.notifyUsers = function (postData, next) {
 		'downvote:disabled': parseInt(Meta.config['downvote:disabled'], 10) === 1,
 	};
 
-	SocketHelpers.notifyOnlineUsers(parseInt(postData.uid, 10), result);
+	SocketHelpers.notifyNew(parseInt(postData.uid, 10), 'newPost', result);
 	next();
 };
 
