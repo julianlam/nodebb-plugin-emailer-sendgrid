@@ -1,6 +1,6 @@
 {
   "name": "nodebb-plugin-emailer-sendgrid",
-  "version": "2.2.4",
+  "version": "2.2.5",
   "description": "An emailer plugin for NodeBB using SendGrid as a third party service",
   "main": "index.js",
   "repository": {
