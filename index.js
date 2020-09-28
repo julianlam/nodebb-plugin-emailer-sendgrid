@@ -222,6 +222,8 @@ Emailer.send = function (data, callback) {
 					}
 					SendGrid.send({
 						to: data.to,
+						cc: data.cc,
+						bcc: data.bcc,
 						toname: data.toName,
 						subject: data.subject,
 						from: from,
