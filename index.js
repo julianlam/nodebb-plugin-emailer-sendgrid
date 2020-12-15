@@ -93,9 +93,9 @@ Emailer.verifyEvent = function (eventObj, next) {
 };
 
 Emailer.resolveUserOrGuest = function (eventObj, callback) {
-// This method takes the event object, reads the sender email and resolves it to a uid
-// if the email is set in the system. If not, and guest posting is enabled, the email
-// is treated as a guest instead.
+	// This method takes the event object, reads the sender email and resolves it to a uid
+	// if the email is set in the system. If not, and guest posting is enabled, the email
+	// is treated as a guest instead.
 	var envelope = JSON.parse(eventObj.envelope);
 	User.getUidByEmail(envelope.from, function (err, uid) {
 		if (err) {
@@ -255,21 +255,21 @@ Emailer.handleError = function (err, eventObj) {
 
 	if (err) {
 		switch (err.message) {
-		case '[[error:no-privileges]]':
-		case 'invalid-data':
+			case '[[error:no-privileges]]':
+			case 'invalid-data':
 			// Bounce a return back to sender
-			hostEmailer.sendToEmail('bounce', envelope.from, Meta.config.defaultLang || 'en-GB', {
-				site_title: Meta.config.title || 'NodeBB',
-				subject: 'Re: ' + eventObj.subject,
-				messageBody: eventObj.html,
-			}, function (err) {
-				if (err) {
-					winston.error('[emailer.sendgrid] Unable to bounce email back to sender! ' + err.message);
-				} else {
-					winston.verbose('[emailer.sendgrid] Bounced email back to sender (' + envelope.from + ')');
-				}
-			});
-			break;
+				hostEmailer.sendToEmail('bounce', envelope.from, Meta.config.defaultLang || 'en-GB', {
+					site_title: Meta.config.title || 'NodeBB',
+					subject: 'Re: ' + eventObj.subject,
+					messageBody: eventObj.html,
+				}, function (err) {
+					if (err) {
+						winston.error('[emailer.sendgrid] Unable to bounce email back to sender! ' + err.message);
+					} else {
+						winston.verbose('[emailer.sendgrid] Bounced email back to sender (' + envelope.from + ')');
+					}
+				});
+				break;
 		}
 	}
 };
