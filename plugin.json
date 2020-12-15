@@ -7,6 +7,9 @@
         { "hook": "filter:admin.header.build", "method": "admin.menu"},
         { "hook": "static:app.load", "method": "init" }
     ],
+	"acpScripts": [
+		"static/lib/admin.js"
+	],
     "languages": "languages",
     "defaultLang": "en_GB"
 }
