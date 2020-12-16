@@ -52,17 +52,20 @@
 
 				{{{ if marketing.ok }}}
 					<p>
-						Status: <span style="color: green;">Operational</span>
+						Status: <span style="color: green;">Operational</span><br />
+						Count: {marketing.count} contacts in list | <a href="https://mc.sendgrid.com/contacts/lists/{marketing.id}">View list in SendGrid</a>
 					</p>
 
-					<div class="checkbox">
-						<label class="mdl-switch mdl-js-switch mdl-js-ripple-effect">
-							<input class="mdl-switch__input" type="checkbox" id="marketing_enabled" name="marketing_enabled">
-							<span class="mdl-switch__label">Enable marketing list synchronization</span>
-						</label>
-					</div>
+					<form role="form" class="emailer-settings">
+						<div class="checkbox">
+							<label class="mdl-switch mdl-js-switch mdl-js-ripple-effect">
+								<input class="mdl-switch__input" type="checkbox" id="marketing_enabled" name="marketing_enabled">
+								<span class="mdl-switch__label">Enable automatic addition of newly registered users</span>
+							</label>
+						</div>
+					</form>
 
-					<button class="btn btn-block">Synchronize</button>
+					<button class="btn btn-block btn-primary" data-action="synchronize"><i class="fa fa-refresh"></i> Synchronize</button>
 				{{{ else }}}
 					<div class="alert alert-warning">
 						<p>

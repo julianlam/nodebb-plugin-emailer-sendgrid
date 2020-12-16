@@ -8,6 +8,20 @@ define('admin/plugins/emailer-sendgrid', ['settings'], function (settings) {
 	ACP.init = function () {
 		settings.load('sendgrid', $('.emailer-settings'));
 		$('#save').on('click', saveSettings);
+
+		$('[data-action="synchronize"]').on('click', ACP.synchronize);
+	};
+
+	ACP.synchronize = function () {
+		$.ajax({
+			method: 'put',
+			url: config.relative_path + '/api/admin/plugins/emailer-sendgrid/synchronize',
+			headers: {
+				'x-csrf-token': config.csrf_token,
+			},
+		}).done(() => {
+			app.alertSuccess('Synchronization with SendGrid started.');
+		});
 	};
 
 	function saveSettings() {
