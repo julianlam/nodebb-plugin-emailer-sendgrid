@@ -319,7 +319,7 @@ Emailer.marketing.setup = async () => {
 				name: 'NodeBB',
 			},
 		});
-		winston.info('[plugins/emailer-sendgrid] Marketing list created: ', body.id);
+		winston.info(`[plugins/emailer-sendgrid] Marketing list created: ${body.id}`);
 
 		await Meta.settings.set('sendgrid', {
 			'marketing.id': body.id,
@@ -370,15 +370,15 @@ Emailer.marketing.getCount = async () => {
 		return null;
 	}
 
-	const [response, body] = await Client.request({
-		method: 'GET',
-		url: `/v3/marketing/lists/${Emailer._settings['marketing.id']}`,
-	});
-
-	if (!response.statusCode === 200) {
+	try {
+		const [, body] = await Client.request({
+			method: 'GET',
+			url: `/v3/marketing/lists/${Emailer._settings['marketing.id']}`,
+		});
+		return body.contact_count;
+	} catch (e) {
 		return null;
 	}
-	return body.contact_count;
 };
 
 Emailer.marketing.synchronize = async (req, res) => {
