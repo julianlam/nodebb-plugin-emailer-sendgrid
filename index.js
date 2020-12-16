@@ -4,6 +4,7 @@ const winston = require.main.require('winston');
 const async = require.main.require('async');
 const nconf = require.main.require('nconf');
 const url = require.main.require('url');
+const db = require.main.require('./src/database');
 const batch = require.main.require('./src/batch');
 const user = require.main.require('./src/user');
 const Meta = require.main.require('./src/meta');
@@ -31,6 +32,7 @@ Emailer.init = function (data, callback) {
 		const count = await Emailer.marketing.getCount();
 		res.render('admin/plugins/emailer-sendgrid', {
 			destinationURL: destinationURL,
+			userCount: await db.sortedSetCard('users:joindate'),
 			marketing: {
 				id: Emailer._settings['marketing.id'],
 				count,
@@ -411,6 +413,27 @@ Emailer.marketing.synchronize = async (req, res) => {
 
 	winston.info('[plugins/emailer-sendgrid] Synchronization complete.');
 	res.sendStatus(200);
+};
+
+Emailer.marketing.add = async ({ user }) => {
+	if (Emailer._settings.marketing_enabled === 'on') {
+		try {
+			await Client.request({
+				method: 'PUT',
+				url: `/v3/marketing/contacts`,
+				body: {
+					list_ids: [Emailer._settings['marketing.id']],
+					contacts: [{
+						email: user.email,
+					}],
+				},
+			});
+			winston.info(`[plugins/emailer-sendgrid] Added new user ${user.username} to marketing list`);
+		} catch (e) {
+			winston.warn('[plugins/emailer-sendgrid] Failed to add new user to list');
+			console.log(e.response.body);
+		}
+	}
 };
 
 module.exports = Emailer;

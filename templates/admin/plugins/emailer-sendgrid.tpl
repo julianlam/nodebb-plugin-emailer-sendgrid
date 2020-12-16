@@ -53,7 +53,7 @@
 				{{{ if marketing.ok }}}
 					<p>
 						Status: <span style="color: green;">Operational</span><br />
-						Count: {marketing.count} contacts in list | <a href="https://mc.sendgrid.com/contacts/lists/{marketing.id}">View list in SendGrid</a>
+						Count: {marketing.count} contacts in list, {userCount} users registered | <a href="https://mc.sendgrid.com/contacts/lists/{marketing.id}">View list in SendGrid</a>
 					</p>
 
 					<form role="form" class="emailer-settings">
