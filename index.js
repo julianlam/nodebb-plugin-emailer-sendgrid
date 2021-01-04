@@ -316,19 +316,24 @@ Emailer.marketing.setup = async () => {
 	if (!Emailer._settings['marketing.id']) {
 		// Create a new list
 		winston.info('[plugins/emailer-sendgrid] No marketing list found, creating one now...');
-		const [, body] = await Client.request({
-			method: 'POST',
-			url: '/v3/marketing/lists',
-			body: {
-				name: 'NodeBB',
-			},
-		});
-		winston.info(`[plugins/emailer-sendgrid] Marketing list created: ${body.id}`);
+		try {
+			const [, body] = await Client.request({
+				method: 'POST',
+				url: '/v3/marketing/lists',
+				body: {
+					name: 'NodeBB',
+				},
+			});
+			winston.info(`[plugins/emailer-sendgrid] Marketing list created: ${body.id}`);
 
-		await Meta.settings.set('sendgrid', {
-			'marketing.id': body.id,
-		});
-		Emailer._settings['marketing.id'] = body.id;
+			await Meta.settings.set('sendgrid', {
+				'marketing.id': body.id,
+			});
+			Emailer._settings['marketing.id'] = body.id;
+		} catch (e) {
+			winston.warn('[plugins/emailer-sendgrid] Unable to create marketing list -- perhaps your API key does not have access to SendGrid Marketing?');
+			return;
+		}
 	}
 
 	// Create some custom fields
