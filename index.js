@@ -309,6 +309,10 @@ Emailer.admin = {
 Emailer.marketing = {};
 
 Emailer.marketing.setup = async () => {
+	if (!nconf.get('isPrimary')) {
+		return;
+	}
+
 	if (!Emailer._settings['marketing.id']) {
 		// Create a new list
 		winston.info('[plugins/emailer-sendgrid] No marketing list found, creating one now...');
