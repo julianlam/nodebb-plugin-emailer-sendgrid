@@ -191,82 +191,55 @@ Emailer.notifyUsers = function (postData, next) {
 };
 
 
-Emailer.send = function (data, callback) {
+Emailer.send = async (data) => {
 	if (Mailer) {
 		data.headers = data.headers || {};	// pre core v1.10.2
 
-		async.waterfall([
-			function (next) {
-				if (data.fromUid) {
-					next(null, data.fromUid);
-				} else if (data._raw.notification && data._raw.notification.pid) {
-					Posts.getPostField(data._raw.notification.pid, 'uid', next);
-				} else {
-					next(null, false);
-				}
-			},
-			function (uid, next) {
-				if (uid === false) { return next(null, {}); }
+		let fromUid;
+		let userData = {};
+		if (data.fromUid) {
+			fromUid = data.fromUid;
+		} else if (data._raw.notification && data._raw.notification.pid) {
+			fromUid = await Posts.getPostField(data._raw.notification.pid, 'uid');
+		}
 
-				User.getSettings(uid, function (err, settings) {
-					if (err) {
-						return next(err);
-					}
-
-					if (settings.showemail) {
-						User.getUserFields(parseInt(uid, 10), ['email', 'username'], function (err, userData) {
-							if (err) {
-								return next(err);
-							}
-
-							next(null, userData);
-						});
-					} else {
-						User.getUserFields(parseInt(uid, 10), ['username'], function (err, userData) {
-							if (err) {
-								return next(err);
-							}
-
-							next(null, userData);
-						});
-					}
-				});
-			},
-			function (userData, next) {
-				let replyTo;
-				if (data._raw.notification && data._raw.notification.pid && Emailer._settings.inbound_enabled === 'on') {
-					replyTo = 'reply-' + data._raw.notification.pid + '@' + Emailer.hostname;
-				}
-				let from = data.from;
-				if (data.from_name || userData.username) {
-					from = (data.from_name || userData.username) + ' <' + data.from + '>';
-				}
-				Mailer.send({
-					to: data.to,
-					cc: data.cc,
-					bcc: data.bcc,
-					toname: data.toName,
-					subject: data.subject,
-					from: from,
-					text: data.text,
-					html: data.html,
-					headers: data.headers,
-					reply_to: replyTo,
-				}, next);
-			},
-		], function (err) {
-			if (!err) {
-				winston.verbose('[emailer.sendgrid] Sent `' + data.template + '` email to uid ' + data.uid);
-				callback(null, data);
+		if (fromUid) {
+			const settings = await User.getSettings(fromUid);
+			if (settings.showemail) {
+				userData = await User.getUserFields(parseInt(fromUid, 10), ['email', 'username']);
 			} else {
-				winston.warn('[emailer.sendgrid] Unable to send `' + data.template + '` email to uid ' + data.uid + '!!');
-				winston.warn('[emailer.sendgrid] Error Stringified:' + JSON.stringify(err));
-				callback(err);
+				userData = await User.getUserFields(parseInt(fromUid, 10), ['username']);
 			}
-		});
-	} else {
-		winston.warn('[plugins/emailer-sendgrid] API user and key not set, not sending email as SendGrid object is not instantiated.');
-		callback(null, data);
+		}
+
+		let replyTo;
+		if (data._raw.notification && data._raw.notification.pid && Emailer._settings.inbound_enabled === 'on') {
+			replyTo = 'reply-' + data._raw.notification.pid + '@' + Emailer.hostname;
+		}
+		let from = data.from;
+		if (data.from_name || userData.username) {
+			from = (data.from_name || userData.username) + ' <' + data.from + '>';
+		}
+
+		try {
+			await Mailer.send({
+				to: data.to,
+				cc: data.cc,
+				bcc: data.bcc,
+				toname: data.toName,
+				subject: data.subject,
+				from: from,
+				text: data.text,
+				html: data.html,
+				headers: data.headers,
+				reply_to: replyTo,
+			});
+		} catch (err) {
+			winston.warn('[emailer.sendgrid] Unable to send `' + data.template + '` email to uid ' + data.uid + '!!');
+			winston.warn('[emailer.sendgrid] Error Stringified:' + JSON.stringify(err));
+		}
+
+		winston.verbose('[emailer.sendgrid] Sent `' + data.template + '` email to uid ' + data.uid);
 	}
 };
 
@@ -276,8 +249,8 @@ Emailer.handleError = function (err, eventObj) {
 	if (err) {
 		switch (err.message) {
 			case '[[error:no-privileges]]':
-			case 'invalid-data':
-			// Bounce a return back to sender
+			case 'invalid-data': {
+				// Bounce a return back to sender
 				hostEmailer.sendToEmail('bounce', envelope.from, Meta.config.defaultLang || 'en-GB', {
 					site_title: Meta.config.title || 'NodeBB',
 					subject: 'Re: ' + eventObj.subject,
@@ -290,6 +263,7 @@ Emailer.handleError = function (err, eventObj) {
 					}
 				});
 				break;
+			}
 		}
 	}
 };
