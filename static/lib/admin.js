@@ -1,7 +1,5 @@
 'use strict';
 
-/* globals $, app, socket, define, config */
-
 define('admin/plugins/emailer-sendgrid', ['settings'], function (settings) {
 	var ACP = {};
 

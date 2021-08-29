@@ -19,16 +19,16 @@ const hostEmailer = require.main.require('./src/emailer');
 let Mailer;
 let Client;
 
-var Emailer = {
+const Emailer = {
 	_settings: {},
 };
 
 Emailer.hostname = url.parse(nconf.get('url')).hostname;
-Emailer.receiptRegex = new RegExp('^reply-([\\d]+)@' + Emailer.hostname + '$');
+Emailer.receiptRegex = new RegExp(`^reply-([\\d]+)@${Emailer.hostname}$`);
 
 Emailer.init = function (data, callback) {
-	var render = async (req, res) => {
-		var destinationURL = nconf.get('url') + '/plugins/emailer-sendgrid/webhook';
+	const render = async (req, res) => {
+		const destinationURL = `${nconf.get('url')}/plugins/emailer-sendgrid/webhook`;
 		const count = await Emailer.marketing.getCount();
 		res.render('admin/plugins/emailer-sendgrid', {
 			destinationURL: destinationURL,
@@ -41,7 +41,7 @@ Emailer.init = function (data, callback) {
 		});
 	};
 
-	Meta.settings.get('sendgrid', function (err, settings) {
+	Meta.settings.get('sendgrid', (err, settings) => {
 		if (!err && settings && settings.apiKey) {
 			Emailer._settings = settings;
 
@@ -57,8 +57,8 @@ Emailer.init = function (data, callback) {
 			winston.error('[plugins/emailer-sendgrid] API key not set!');
 		}
 
-		var multipart = require.main.require('connect-multiparty');
-		var multipartMiddleware = multipart();
+		const multipart = require.main.require('connect-multiparty');
+		const multipartMiddleware = multipart();
 
 		data.router.get('/admin/plugins/emailer-sendgrid', data.middleware.admin.buildHeader, render);
 		data.router.get('/api/admin/plugins/emailer-sendgrid', render);
@@ -76,7 +76,7 @@ Emailer.receive = function (req, res) {
 		req: req,
 		res: res,
 		service: 'sendgrid',
-	}, function (err, data) {
+	}, (err, data) => {
 		if (err) {
 			Emailer.handleError(err, data.req.body);
 			return res.sendStatus(200);
@@ -87,7 +87,7 @@ Emailer.receive = function (req, res) {
 			Emailer.resolveUserOrGuest,
 			Emailer.processEvent,
 			Emailer.notifyUsers,
-		], function (err, eventObj) {
+		], (err, eventObj) => {
 			if (err) {
 				Emailer.handleError(err, eventObj);
 			}
@@ -98,12 +98,12 @@ Emailer.receive = function (req, res) {
 };
 
 Emailer.verifyEvent = function (eventObj, next) {
-	var pid = eventObj.to.match(Emailer.receiptRegex);
+	let pid = eventObj.to.match(Emailer.receiptRegex);
 
 	if (pid && pid.length && pid[1]) {
 		pid = pid[1];
 		eventObj.pid = pid;
-		Posts.getPostField(pid, 'tid', function (err, tid) {
+		Posts.getPostField(pid, 'tid', (err, tid) => {
 			if (!err && tid) {
 				eventObj.tid = tid;
 				next(null, eventObj);
@@ -122,8 +122,8 @@ Emailer.resolveUserOrGuest = function (eventObj, callback) {
 	// This method takes the event object, reads the sender email and resolves it to a uid
 	// if the email is set in the system. If not, and guest posting is enabled, the email
 	// is treated as a guest instead.
-	var envelope = JSON.parse(eventObj.envelope);
-	User.getUidByEmail(envelope.from, function (err, uid) {
+	const envelope = JSON.parse(eventObj.envelope);
+	User.getUidByEmail(envelope.from, (err, uid) => {
 		if (err) {
 			return callback(err);
 		}
@@ -138,7 +138,7 @@ Emailer.resolveUserOrGuest = function (eventObj, callback) {
 				function (cid, next) {
 					Privileges.categories.groupPrivileges(cid, 'guests', next);
 				},
-			], function (err, privileges) {
+			], (err, privileges) => {
 				if (err) {
 					return callback(privileges);
 				}
@@ -157,7 +157,7 @@ Emailer.resolveUserOrGuest = function (eventObj, callback) {
 					callback(null, eventObj);
 				} else {
 					// Guests can't post here
-					winston.verbose('[emailer.sendgrid] Received reply by guest to pid ' + eventObj.pid + ', but guests are not allowed to post here.');
+					winston.verbose(`[emailer.sendgrid] Received reply by guest to pid ${eventObj.pid}, but guests are not allowed to post here.`);
 					callback(new Error('[[error:no-privileges]]'));
 				}
 			});
@@ -166,7 +166,7 @@ Emailer.resolveUserOrGuest = function (eventObj, callback) {
 };
 
 Emailer.processEvent = function (eventObj, callback) {
-	winston.verbose('[emailer.sendgrid] Processing incoming email reply by uid ' + eventObj.uid + ' to pid ' + eventObj.pid);
+	winston.verbose(`[emailer.sendgrid] Processing incoming email reply by uid ${eventObj.uid} to pid ${eventObj.pid}`);
 	Topics.reply({
 		uid: eventObj.uid,
 		toPid: eventObj.pid,
@@ -177,7 +177,7 @@ Emailer.processEvent = function (eventObj, callback) {
 };
 
 Emailer.notifyUsers = function (postData, next) {
-	var result = {
+	const result = {
 		posts: [postData],
 		privileges: {
 			'topics:reply': true,
@@ -214,11 +214,11 @@ Emailer.send = async (data) => {
 
 		let replyTo;
 		if (data._raw.notification && data._raw.notification.pid && Emailer._settings.inbound_enabled === 'on') {
-			replyTo = 'reply-' + data._raw.notification.pid + '@' + Emailer.hostname;
+			replyTo = `reply-${data._raw.notification.pid}@${Emailer.hostname}`;
 		}
-		let from = data.from;
+		let { from } = data;
 		if (data.from_name || userData.username) {
-			from = (data.from_name || userData.username) + ' <' + data.from + '>';
+			from = `${data.from_name || userData.username} <${data.from}>`;
 		}
 
 		try {
@@ -235,16 +235,16 @@ Emailer.send = async (data) => {
 				reply_to: replyTo,
 			});
 		} catch (err) {
-			winston.warn('[emailer.sendgrid] Unable to send `' + data.template + '` email to uid ' + data.uid + '!!');
-			winston.warn('[emailer.sendgrid] Error Stringified:' + JSON.stringify(err));
+			winston.warn(`[emailer.sendgrid] Unable to send \`${data.template}\` email to uid ${data.uid}!!`);
+			winston.warn(`[emailer.sendgrid] Error Stringified:${JSON.stringify(err)}`);
 		}
 
-		winston.verbose('[emailer.sendgrid] Sent `' + data.template + '` email to uid ' + data.uid);
+		winston.verbose(`[emailer.sendgrid] Sent \`${data.template}\` email to uid ${data.uid}`);
 	}
 };
 
 Emailer.handleError = function (err, eventObj) {
-	var envelope = JSON.parse(eventObj.envelope);
+	const envelope = JSON.parse(eventObj.envelope);
 
 	if (err) {
 		switch (err.message) {
@@ -253,13 +253,13 @@ Emailer.handleError = function (err, eventObj) {
 				// Bounce a return back to sender
 				hostEmailer.sendToEmail('bounce', envelope.from, Meta.config.defaultLang || 'en-GB', {
 					site_title: Meta.config.title || 'NodeBB',
-					subject: 'Re: ' + eventObj.subject,
+					subject: `Re: ${eventObj.subject}`,
 					messageBody: eventObj.html,
-				}, function (err) {
+				}, (err) => {
 					if (err) {
-						winston.error('[emailer.sendgrid] Unable to bounce email back to sender! ' + err.message);
+						winston.error(`[emailer.sendgrid] Unable to bounce email back to sender! ${err.message}`);
 					} else {
-						winston.verbose('[emailer.sendgrid] Bounced email back to sender (' + envelope.from + ')');
+						winston.verbose(`[emailer.sendgrid] Bounced email back to sender (${envelope.from})`);
 					}
 				});
 				break;
@@ -366,7 +366,7 @@ Emailer.marketing.getCount = async () => {
 
 Emailer.marketing.synchronize = async (req, res) => {
 	winston.info('[plugins/emailer-sendgrid] Synchronizing...');
-	await batch.processSortedSet('users:joindate', async function (uids) {
+	await batch.processSortedSet('users:joindate', async (uids) => {
 		const data = await user.getUsersFields(uids, ['username', 'email', 'fullname']);
 		try {
 			await Client.request({
