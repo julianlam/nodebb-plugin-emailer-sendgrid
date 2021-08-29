@@ -288,25 +288,36 @@ Emailer.marketing.setup = async () => {
 	}
 
 	if (!Emailer._settings['marketing.id']) {
-		// Create a new list
-		winston.info('[plugins/emailer-sendgrid] No marketing list found, creating one now...');
-		try {
-			const [, body] = await Client.request({
-				method: 'POST',
-				url: '/v3/marketing/lists',
-				body: {
-					name: 'NodeBB',
-				},
-			});
-			winston.info(`[plugins/emailer-sendgrid] Marketing list created: ${body.id}`);
-
+		// Check for existing list
+		const listId = await Emailer.marketing.check();
+		if (listId) {
 			await Meta.settings.set('sendgrid', {
-				'marketing.id': body.id,
+				'marketing.id': listId,
 			});
-			Emailer._settings['marketing.id'] = body.id;
-		} catch (e) {
-			winston.warn('[plugins/emailer-sendgrid] Unable to create marketing list -- perhaps your API key does not have access to SendGrid Marketing?');
-			return;
+			Emailer._settings['marketing.id'] = listId;
+			winston.info(`[plugins/emailer-sendgrid] Marketing list found: ${listId}`);
+		} else {
+			// Create a new list
+			winston.info('[plugins/emailer-sendgrid] No marketing list found, creating one now...');
+			try {
+				const [, body] = await Client.request({
+					method: 'POST',
+					url: '/v3/marketing/lists',
+					body: {
+						name: 'NodeBB',
+					},
+				});
+				winston.info(`[plugins/emailer-sendgrid] Marketing list created: ${body.id}`);
+
+				await Meta.settings.set('sendgrid', {
+					'marketing.id': body.id,
+				});
+				Emailer._settings['marketing.id'] = body.id;
+			} catch (e) {
+				console.log(e.response.body.errors);
+				winston.warn('[plugins/emailer-sendgrid] Unable to create marketing list -- perhaps your API key does not have access to SendGrid Marketing?');
+				return;
+			}
 		}
 	}
 
@@ -346,6 +357,25 @@ Emailer.marketing.setup = async () => {
 		await Meta.settings.set('sendgrid', payload);
 	}
 	winston.info('[plugins/emailer-sendgrid] Done.');
+};
+
+Emailer.marketing.check = async () => {
+	try {
+		const [, body] = await Client.request({
+			method: 'GET',
+			url: '/v3/marketing/lists',
+		});
+
+		for (let x = 0; x < body.result.length; x++) {
+			if (body.result[x].name === 'NodeBB') {
+				return body.result[x].id;
+			}
+		}
+
+		return false;
+	} catch (e) {
+		winston.warn('[plugins/emailer-sendgrid] Unable to retrieve marketing lists -- perhaps your API key does not have access to SendGrid Marketing?');
+	}
 };
 
 Emailer.marketing.getCount = async () => {
