@@ -21,7 +21,7 @@
   "homepage": "https://github.com/julianlam/nodebb-plugin-emailer-sendgrid",
   "dependencies": {
     "@sendgrid/client": "^7.4.0",
-    "@sendgrid/mail": "^6.4.0",
+    "@sendgrid/mail": "^7.0.0",
     "eslint": "8.x",
     "node-email-reply-parser": "^0.1.0"
   },
