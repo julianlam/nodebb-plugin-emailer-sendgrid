@@ -1,8 +1,8 @@
 <div class="row">
 	<div class="col-sm-6">
-		<div class="panel panel-default">
-			<div class="panel-heading">Emailer (SendGrid)</div>
-			<div class="panel-body">
+		<div class="card">
+			<div class="card-header">Emailer (SendGrid)</div>
+			<div class="card-body">
 				<blockquote>
 					<p>
 						SendGrid is the world's largest Email Infrastructure as a Service provider. Our email delivery service moves 2% of the world's non-spam email (over 14 billion emails/month) for more than 180,000 companies including technology leaders like Pinterest, Spotify, and Uber.
@@ -29,8 +29,8 @@
 				<hr />
 
 				<form role="form" class="emailer-settings">
-					<div class="form-group">
-						<label for="apiKey">API Key</label>
+					<div class="mb-3">
+						<label class="form-label" for="apiKey">API Key</label>
 						<input placeholder="Api Key here" type="text" class="form-control" id="apiKey" name="apiKey" />
 					</div>
 				</form>
@@ -38,9 +38,9 @@
 		</div>
 	</div>
 	<dic class="col-sm-6">
-		<div class="panel panel-default">
-			<div class="panel-heading">Marketing List</div>
-			<div class="panel-body">
+		<div class="card">
+			<div class="card-header">Marketing List</div>
+			<div class="card-body">
 				<p class="lead">
 					NodeBB can also be set up to automatically add members to a <a href="https://sendgrid.com/docs/ui/managing-contacts/">SendGrid marketing list</a>.
 				</p>
@@ -57,10 +57,10 @@
 					</p>
 
 					<form role="form" class="emailer-settings">
-						<div class="checkbox">
-							<label class="mdl-switch mdl-js-switch mdl-js-ripple-effect">
-								<input class="mdl-switch__input" type="checkbox" id="marketing_enabled" name="marketing_enabled">
-								<span class="mdl-switch__label">Enable automatic addition of newly registered users</span>
+						<div class="form-check">
+							<input class="form-check-input" type="checkbox" id="marketing_enabled" name="marketing_enabled">
+							<label class="form-check-label">
+								<span>Enable automatic addition of newly registered users</span>
 							</label>
 						</div>
 					</form>
@@ -79,9 +79,9 @@
 			</div>
 		</div>
 
-		<div class="panel panel-default">
-			<div class="panel-heading">Incoming Email Settings</div>
-			<div class="panel-body">
+		<div class="card">
+			<div class="card-header">Incoming Email Settings</div>
+			<div class="card-body">
 				<p>
 					This plugin can also be configured to receive emails <strong>if configured properly via Sendgrid</strong>.
 				</p>
@@ -100,10 +100,10 @@
 					<fieldset>
 						<div class="row">
 							<div class="col-sm-6">
-								<div class="checkbox">
-									<label class="mdl-switch mdl-js-switch mdl-js-ripple-effect">
-										<input class="mdl-switch__input" type="checkbox" id="inbound_enabled" name="inbound_enabled">
-										<span class="mdl-switch__label">Enable Reply-by-email</span>
+								<div class="form-check mb-3">
+									<input class="form-check-input" type="checkbox" id="inbound_enabled" name="inbound_enabled">
+									<label class="form-check-label">
+										<span>Enable Reply-by-email</span>
 									</label>
 								</div>
 							</div>
