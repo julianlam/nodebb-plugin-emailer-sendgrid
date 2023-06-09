@@ -31,6 +31,7 @@ Emailer.init = function (data, callback) {
 		const destinationURL = `${nconf.get('url')}/plugins/emailer-sendgrid/webhook`;
 		const count = await Emailer.marketing.getCount();
 		res.render('admin/plugins/emailer-sendgrid', {
+			title: 'Emailer (SendGrid)',
 			destinationURL: destinationURL,
 			userCount: await db.sortedSetCard('users:joindate'),
 			marketing: {
