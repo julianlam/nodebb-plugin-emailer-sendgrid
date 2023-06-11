@@ -73,7 +73,7 @@ Emailer.init = function (data, callback) {
 };
 
 Emailer.receive = function (req, res) {
-	Plugins.fireHook('filter:plugins.emailer.receive', {
+	Plugins.hooks.fire('filter:plugins.emailer.receive', {
 		req: req,
 		res: res,
 		service: 'sendgrid',
