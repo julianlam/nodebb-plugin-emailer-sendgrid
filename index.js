@@ -397,9 +397,10 @@ Emailer.marketing.getCount = async () => {
 
 Emailer.marketing.synchronize = async (req, res) => {
 	winston.info('[plugins/emailer-sendgrid] Synchronizing...');
-	await batch.processSortedSet('users:joindate', async (uids) => {
-		const data = await user.getUsersFields(uids, ['username', 'email', 'fullname']);
-		try {
+	try {
+		await batch.processSortedSet('users:joindate', async (uids) => {
+			const data = await user.getUsersFields(uids, ['username', 'email', 'fullname']);
+
 			await Client.request({
 				method: 'PUT',
 				url: `/v3/marketing/contacts`,
@@ -418,13 +419,12 @@ Emailer.marketing.synchronize = async (req, res) => {
 					}),
 				},
 			});
-		} catch (e) {
-			winston.warn('[plugins/emailer-sendgrid] Unable to synchronize.');
-			res.sendStatus(500);
-			// console.log(e.response.body);
-		}
-	}, { batch: 500, interval: 100 });
-
+		}, { batch: 500, interval: 100 });
+	} catch (e) {
+		winston.warn('[plugins/emailer-sendgrid] Unable to synchronize.');
+		res.sendStatus(500);
+		return;
+	}
 	winston.info('[plugins/emailer-sendgrid] Synchronization complete.');
 	res.sendStatus(200);
 };
