@@ -421,7 +421,7 @@ Emailer.marketing.synchronize = async (req, res) => {
 			});
 		}, { batch: 500, interval: 100 });
 	} catch (e) {
-		winston.warn('[plugins/emailer-sendgrid] Unable to synchronize.');
+		winston.warn(`[plugins/emailer-sendgrid] Unable to synchronize.\n${err.stack}`);
 		res.sendStatus(500);
 		return;
 	}
