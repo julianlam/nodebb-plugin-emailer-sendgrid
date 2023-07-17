@@ -399,8 +399,8 @@ Emailer.marketing.synchronize = async (req, res) => {
 	winston.info('[plugins/emailer-sendgrid] Synchronizing...');
 	try {
 		await batch.processSortedSet('users:joindate', async (uids) => {
-			const data = await user.getUsersFields(uids, ['username', 'email', 'fullname']);
-
+			let data = await user.getUsersFields(uids, ['username', 'email', 'fullname']);
+			data = data.filter(u => u && u.email);
 			await Client.request({
 				method: 'PUT',
 				url: `/v3/marketing/contacts`,
