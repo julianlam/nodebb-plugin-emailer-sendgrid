@@ -438,6 +438,7 @@ Emailer.marketing.add = async ({ user }) => {
 				body: {
 					list_ids: [Emailer._settings['marketing.id']],
 					contacts: [{
+						identifier: `nodebb.${user.uid}`,
 						email: user.email,
 					}],
 				},
