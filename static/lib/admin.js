@@ -1,6 +1,6 @@
 'use strict';
 
-define('admin/plugins/emailer-sendgrid', ['settings'], function (settings) {
+define('admin/plugins/emailer-sendgrid', ['settings', 'alerts'], function (settings, alerts) {
 	var ACP = {};
 
 	ACP.init = function () {
@@ -18,13 +18,13 @@ define('admin/plugins/emailer-sendgrid', ['settings'], function (settings) {
 				'x-csrf-token': config.csrf_token,
 			},
 		}).done(() => {
-			app.alertSuccess('Synchronization with SendGrid started.');
+			alerts.success('Synchronization with SendGrid started.');
 		});
 	};
 
 	function saveSettings() {
 		settings.save('sendgrid', $('.emailer-settings'), function () {
-			app.alert({
+			alerts.alert({
 				type: 'success',
 				alert_id: 'sendgrid-saved',
 				title: 'Settings Saved',
