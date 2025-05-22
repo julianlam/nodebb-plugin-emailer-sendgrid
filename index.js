@@ -58,13 +58,14 @@ Emailer.init = function (data, callback) {
 			winston.error('[plugins/emailer-sendgrid] API key not set!');
 		}
 
-		const multipart = require.main.require('connect-multiparty');
-		const multipartMiddleware = multipart();
+		const multer = require('multer');
+		const storage = multer.diskStorage({});
+		const upload = multer({ storage });
 
 		data.router.get('/admin/plugins/emailer-sendgrid', data.middleware.admin.buildHeader, render);
 		data.router.get('/api/admin/plugins/emailer-sendgrid', render);
 		data.router.put('/api/admin/plugins/emailer-sendgrid/synchronize', Emailer.marketing.synchronize);
-		data.router.post('/plugins/emailer-sendgrid/webhook', multipartMiddleware, Emailer.receive);
+		data.router.post('/plugins/emailer-sendgrid/webhook', upload.any(), Emailer.receive);
 
 		if (typeof callback === 'function') {
 			callback();
