@@ -1365,7 +1365,7 @@ esrecurse@^4.3.0:
 esrever@^0.2.0:
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/esrever/-/esrever-0.2.0.tgz#96e9d28f4f1b1a76784cd5d490eaae010e7407b8"
-  integrity sha1-lunSj08bGnZ4TNXUkOquAQ50B7g=
+  integrity sha512-1e9YJt6yQkyekt2BUjTky7LZWWVyC2cIpgdnsTAvMcnzXIZvlW/fTMPkxBcZoYhgih4d+EC+iw+yv9GIkz7vrw==
 
 estraverse@^5.1.0, estraverse@^5.2.0:
   version "5.3.0"
@@ -2371,7 +2371,7 @@ lodash.upperfirst@^4.3.1:
   resolved "https://registry.yarnpkg.com/lodash.upperfirst/-/lodash.upperfirst-4.3.1.tgz#1365edf431480481ef0d1c68957a5ed99d49f7ce"
   integrity sha512-sReKOYJIJf74dhJONhU4e0/shzi1trVbSWDOhKYE5XV2O+H7Sb2Dihwuc7xWxVl+DgFPyTqIN3zMfT9cq5iWDg==
 
-lodash@^4.17.4:
+lodash@^4.17.21:
   version "4.17.21"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.21.tgz#679591c564c3bffaae8454cf0b3df370c3d6911c"
   integrity sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==
@@ -2487,12 +2487,12 @@ natural-compare@^1.4.0:
   integrity sha512-OWND8ei3VtNC9h7V60qff3SVobHr996CTwgxubgyQYEpg290h9J0buyECNNJexkFm5sOajh5G116RYA1c8ZMSw==
 
 node-email-reply-parser@^0.1.0:
-  version "0.1.1"
-  resolved "https://registry.yarnpkg.com/node-email-reply-parser/-/node-email-reply-parser-0.1.1.tgz#94017db2748d11d545989b9fa3b591dedc94b2bf"
-  integrity sha512-E0WT9dv9wYlQ2V6QlJ4AgAb3D31Ajlx0d5bLwiaGkRBc86yzPikCl8QwqBfAABlzZskrforHQLl2gx6t2wAzWg==
+  version "0.1.4"
+  resolved "https://registry.yarnpkg.com/node-email-reply-parser/-/node-email-reply-parser-0.1.4.tgz#97bd2aef98466c0a7233ff341ec9dcc8a03053d2"
+  integrity sha512-rXiLvb9J8RRNYEf/Ftf2vx+HEjZjB16ONY5Qd9PAFdN0OESkgvGINbtlgIvdIjVeZ1jPPoK/b90sx+lP1CIvqA==
   dependencies:
     esrever "^0.2.0"
-    lodash "^4.17.4"
+    lodash "^4.17.21"
 
 object-assign@^4.1.1:
   version "4.1.1"
