@@ -23,7 +23,7 @@
     "@sendgrid/client": "^7.6.2",
     "@sendgrid/mail": "^7.6.2",
     "eslint": "10.x",
-    "multer": "2.0.0",
+    "multer": "2.0.2",
     "node-email-reply-parser": "^0.1.0"
   },
   "nbbpm": {
