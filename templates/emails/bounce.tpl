@@ -3,7 +3,7 @@
 <hr />
 
 <blockquote>
-	{messageBody}
+	{{txEscape(messageBody)}}
 </blockquote>
 
 <hr />
