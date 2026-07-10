@@ -1,9 +1,9 @@
-[[sendgrid:bounce.generic]]
+{{tx("sendgrid:bounce.generic")}}
 
 <hr />
 
 <blockquote>
-	{{txEscape(messageBody)}}
+	{{messageBody}}
 </blockquote>
 
 <hr />

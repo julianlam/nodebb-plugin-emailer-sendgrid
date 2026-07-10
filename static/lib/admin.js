@@ -1,7 +1,7 @@
 'use strict';
 
 define('admin/plugins/emailer-sendgrid', ['settings', 'alerts'], function (settings, alerts) {
-	var ACP = {};
+	const ACP = {};
 
 	ACP.init = function () {
 		settings.load('sendgrid', $('.emailer-settings'));

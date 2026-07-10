@@ -1,20 +1,20 @@
 'use strict';
 
-const winston = require.main.require('winston');
-const async = require.main.require('async');
-const nconf = require.main.require('nconf');
-const url = require.main.require('url');
-const db = require.main.require('./src/database');
-const batch = require.main.require('./src/batch');
-const user = require.main.require('./src/user');
-const Meta = require.main.require('./src/meta');
-const Posts = require.main.require('./src/posts');
-const Topics = require.main.require('./src/topics');
-const Privileges = require.main.require('./src/privileges');
-const Plugins = require.main.require('./src/plugins');
-const SocketHelpers = require.main.require('./src/socket.io/helpers');
-const User = require.main.require('./src/user');
-const hostEmailer = require.main.require('./src/emailer');
+const winston = nodebb.require('winston');
+const async = nodebb.require('async');
+const nconf = nodebb.require('nconf');
+const url = nodebb.require('url');
+const db = nodebb.require('./src/database');
+const batch = nodebb.require('./src/batch');
+const user = nodebb.require('./src/user');
+const Meta = nodebb.require('./src/meta');
+const Posts = nodebb.require('./src/posts');
+const Topics = nodebb.require('./src/topics');
+const Privileges = nodebb.require('./src/privileges');
+const Plugins = nodebb.require('./src/plugins');
+const SocketHelpers = nodebb.require('./src/socket.io/helpers');
+const User = nodebb.require('./src/user');
+const hostEmailer = nodebb.require('./src/emailer');
 
 let Mailer;
 let Client;
@@ -195,7 +195,7 @@ Emailer.notifyUsers = function (postData, next) {
 
 Emailer.send = async (data) => {
 	if (Mailer) {
-		data.headers = data.headers || {};	// pre core v1.10.2
+		data.headers = data.headers || {}; // pre core v1.10.2
 
 		let fromUid;
 		let userData = {};
