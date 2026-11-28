@@ -33,8 +33,8 @@
     "compatibility": "^4.15.0"
   },
   "devDependencies": {
-    "@commitlint/cli": "21.2.4",
-    "@commitlint/config-angular": "21.2.4",
+    "@commitlint/cli": "21.3.0",
+    "@commitlint/config-angular": "21.3.0",
     "eslint": "10.16.0",
     "eslint-config-nodebb": "2.0.7",
     "husky": "9.1.7",
